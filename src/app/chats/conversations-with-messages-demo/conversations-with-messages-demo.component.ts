@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CometChatLocalize, CometChatTheme, CometChatThemeService, fontHelper } from '@cometchat/chat-uikit-angular';
+import { CometChatLocalize, CometChatTheme, CometChatThemeService, fontHelper, MessagesConfiguration } from '@cometchat/chat-uikit-angular';
+import { CometChat } from "@cometchat/chat-sdk-javascript";
 
 
 @Component({
@@ -19,6 +20,10 @@ export class ConversationsWithMessagesDemoComponent implements OnInit {
     messageTextFont: "700 22px Inter",
   }
 public replaceTheme:boolean = false;
+
+
+public messagesConfiguration = new MessagesConfiguration({});
+
   constructor(private router: Router,private route: ActivatedRoute,private themeService:CometChatThemeService) {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation()?.extras.state) {
@@ -41,6 +46,8 @@ public replaceTheme:boolean = false;
   ngOnInit(): void {
     this.setTheme()
     this.onResize()
+
+	this.messagesConfiguration.messageListConfiguration.messagesRequestBuilder = new CometChat.MessagesRequestBuilder().setLimit(30);
   }
   isMobileView: boolean=false;
   innerWidth!: number;
